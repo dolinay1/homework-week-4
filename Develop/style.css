@@ -1,5 +1,15 @@
+
+p {
+    font-size: 1.5rem;
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
 h1 {
     justify-content: center;
     text-align: center;
     padding-top: 30px;
 }
+
