@@ -10,9 +10,9 @@
   </head>
   <body>
      <!-- Navbar for highscores with timer -->
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand ml-5 text-light">Highscores</a>
-        <a class="navbar-brand ml-5 text-light ml-auto">Timer</a>
+        <a class="navbar-brand ml-5 text-light ml-auto" id="timer">Time:0<span id="timer"></span></a>
       </nav>
 
     <section>
@@ -21,25 +21,30 @@
         <div class="container justify-content-center">
             <div class="row">
                 <div class="col-md-12 text-center mt-5 mb-5">
-                    <p>
+                    <p id="question">
                         You will have a question with 4 multiple choice answers to choose from.<br />
                         Select the correct answer in the shortest amount of time to get a highscore!
                     </p>
                 </div>
             </div>
+            <!-- <div>
+			    <button type="button" class="btn btn-primary choices" id="choice1" value="option1">Choice 1</button>
+				<button type="button" class="btn btn-primary choices" id="choice2" value="option2">Choice 2</button>
+				<button type="button" class="btn btn-primary choices" id="choice3" value="option3">Choice 3</button>
+				<button type="button" class="btn btn-primary choices" id="choice4" value="option4">Choice 4</button>
+			</div> -->
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <button type="button" class="btn btn-primary">Start Quiz</button>
+                    <button type="button" class="btn btn-primary" id="start-quiz">Start Quiz</button>
+                    <div id="choice"></div>
                 </div>
             </div>
         </div>
     </section>
     
-
-
-    <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
   </body>
 </html>
