@@ -10,35 +10,33 @@
 questions = {
     q1: "At which company was Javascript created?",
     q2: "Which of the following was NOT included in the Javascipt ES6 update?",
-    q3: "Inside which HTML element do we put the JavaScript?",
-    q4: "Which of the following function of Array object returns a string representing the array and its elements?",
-    q5: "Which of the following type of variable is visible ONLY within a function where it is defined?",
-    q6: "Which event occurs when the user clicks on an HTML element?",
-    q7: "Who is credited with creating Javascript?",
+    q3: "Which of the following function of Array object returns a string representing the array and its elements?",
+    q4: "Which of the following type of variable is visible ONLY within a function where it is defined?",
+    q5: "Which event occurs when the user clicks on an HTML element?",
+    q6: "Who is credited with creating Javascript?",
 }
 
 choices = {
     q1: ["Google", "Netscape", "Microsoft", "Sun Microsystems"],
     q2: ["const", "spread operator", "constructors", "classes"],
-    c3: ["<js>", "<scripting>", "<script>", "<javascript>"],
-    c4: ["toSource()", "splice()", "sort()", "toString()"],
-    c5: ["Global variable", "Local variable", "Both of the above.", "None of the above."],
-    c6: ["onmouseover", "onmouseclick", "onclick", "onchange"],
-    c7: ["Linus Torvald", "Brendan Eich", "Douglas Crockford", "Bill Gates"],
+    q3: ["toSource()", "splice()", "sort()", "toString()"],
+    q4: ["Global variable", "Local variable", "Both of the above.", "None of the above."],
+    q5: ["onmouseover", "onmouseclick", "onclick", "onchange"],
+    q6: ["Linus Torvald", "Brendan Eich", "Douglas Crockford", "Bill Gates"],
 }
 
 answers = {
     q1: "Netscape",
     q2: "constructors",
-    q3: "<script>",
-    q4: "toString()",
-    q5: "local variable",
-    q6: "onclick",
-    q7: "Brendan Eich",
+    q3: "toString()",
+    q4: "Local variable",
+    q5: "onclick",
+    q6: "Brendan Eich",
 }
 
 let quizProperties = {
     questionSet: 0,
+    correct: 0,
     timer: 100,
     timerOn: false,
     timerValue: "",
@@ -47,21 +45,26 @@ let quizProperties = {
         // the answer to the current question being asked
         let userSelection = Object.values(answers)[quizProperties.questionSet];
         if(this.textContent === userSelection) {
+            quizProperties.correct++;
             console.log("correct!");
+            quizProperties.guessResult();
+        } else if(this.textContent !== userSelection){
+            console.log("wrong");
+            quizProperties.timer-=10;
             quizProperties.guessResult();
         }
     },
     // method to remove previous question results and options
-    guessResult : function(){
+    guessResult: function(){
     
     // increment to next question set
     quizProperties.questionSet++;
     
     // remove the options and results
-    choice.classList.remove(".choice");
-    $('.option').remove();
-    $('#results h3').remove();
-    
+    // button.classList.remove(".choice");
+    $('.choice').remove();
+    // $('#results h3').remove();
+    console.log(quizProperties.questionSet);
     // begin next question
     nextQuestion();
      
@@ -72,6 +75,9 @@ const startQuiz = document.querySelector("#start-quiz");
 const questionDisplay = document.querySelector("#question");
 const choiceDisplay = document.querySelector("#choice");
 const headerDisplay = document.querySelector("h1");
+const initialsDisplay = document.querySelector(".form-group");
+
+initialsDisplay.style.display="none";
 
 // eventlisteners to initialize app
 $(document).ready(function () {
@@ -82,10 +88,6 @@ $(document).ready(function () {
 startQuiz.onclick = function initQuiz() {
 
     nextQuestion();
-
-    console.log(questionDisplay);
-    // console.log(randomQuestion(questions));
-    // questionDisplay.innerHTML = randomQuestion(questions);
 
     // hides the start button when app is initiatlized
     startQuiz.style.display="none";
@@ -103,7 +105,10 @@ startQuiz.onclick = function initQuiz() {
         quizProperties.timer--;
         if (quizProperties.timer <= 0 || quizProperties.questionSet === Object.keys(questions).length){
             // clearInterval(interval);
-            alert("You're out of time!");
+            initialsDisplay.style.display="block";
+            // let button = document.createElement("button");
+            // choiceDisplay.append(button);
+            // button.classList.add("btn", "btn-primary", "mr-3", "choice");
         }
     }, 1000);
  }
@@ -121,21 +126,21 @@ startQuiz.onclick = function initQuiz() {
     //   })
 
     // creates all the trivia guess options in the html
-    for (let i = 0; i < questionChoices.length; i++) {
-        const choice = questionChoices[i];
-        let button = document.createElement("button");
-        choiceDisplay.append(button);
-        button.classList.add("btn", "btn-primary", "mr-3", "choice");
-        button.innerHTML = choice;
-        
-    }
-
-    // questionChoices.forEach(key => {
-    // let button = document.createElement("button");
+    // for (let i = 0; i < questionChoices.length; i++) {
+    //     const choice = questionChoices[i];
+    //     let button = document.createElement("button");
     //     choiceDisplay.append(button);
     //     button.classList.add("btn", "btn-primary", "mr-3", "choice");
-    //     button.innerHTML = key;
-    // });
+    //     button.innerHTML = choice;
+        
+    // }
+
+    questionChoices.forEach(key => {
+    let button = document.createElement("button");
+        choiceDisplay.append(button);
+        button.classList.add("btn", "btn-primary", "mr-3", "choice");
+        button.innerHTML = key;
+    });
  }
 
 
