@@ -138,7 +138,7 @@ startQuiz.onclick = function initQuiz() {
     questionChoices.forEach(key => {
     let button = document.createElement("button");
         choiceDisplay.append(button);
-        button.classList.add("btn", "btn-primary", "mr-3", "choice");
+        button.classList.add("btn", "btn-primary", "mr-3", "mt-3", "choice");
         button.innerHTML = key;
     });
  }
