@@ -37,20 +37,38 @@ answers = {
 let quizProperties = {
     questionSet: 0,
     correct: 0,
-    timer: 100,
-    timerOn: false,
+    timer: 60,
     timerValue: "",
     score: "",
+    // timerId: setInterval(function() {
+    //     timerDisplay.innerHTML = "Time: " + quizProperties.timer;
+    //     quizProperties.timer--;
+    // }, 1000),
+
+    // correctDisplayAlert: setTimeout(function(){
+    //     correctDisplay.style.display="block";
+    // }, 2000),
+    // wrongDisplayAlert: setTimeout(function(){
+    //     wrongDisplay.style.display="block";
+    // }, 2000),
     checkAnswer: function() {
         // the answer to the current question being asked
         let userSelection = Object.values(answers)[quizProperties.questionSet];
         if(this.textContent === userSelection) {
+            // quizProperties.correctDisplayAlert;
             quizProperties.correct++;
-            console.log("correct!");
+            // correctDisplay.style.display="none";
+            // setTimeout(function(){
+            //     correctDisplay.style.display="none";
+            // }, 2000);
             quizProperties.guessResult();
         } else if(this.textContent !== userSelection){
-            console.log("wrong");
-            quizProperties.timer-=10;
+            // correctDisplay.style.display="none";
+            // setTimeout(function(){
+            //     wrongDisplay.style.display="none";
+            // }, 2000),
+            // buttonDisplay.classList.add("btn-danger");
+            quizProperties.timer-=5;
             quizProperties.guessResult();
         }
     },
@@ -59,12 +77,9 @@ let quizProperties = {
     
     // increment to next question set
     quizProperties.questionSet++;
-    
-    // remove the options and results
-    // button.classList.remove(".choice");
+    // remove the questions each time
     $('.choice').remove();
     // $('#results h3').remove();
-    console.log(quizProperties.questionSet);
     // begin next question
     nextQuestion();
      
@@ -76,7 +91,18 @@ const questionDisplay = document.querySelector("#question");
 const choiceDisplay = document.querySelector("#choice");
 const headerDisplay = document.querySelector("h1");
 const initialsDisplay = document.querySelector(".form-group");
+const buttonDisplay = document.querySelector("btn");
+const correctDisplay = document.querySelector("#correct");
+const wrongDisplay = document.querySelector("#wrong");
+const timerDisplay = document.querySelector("#timer");
+const highScoreDisplay = document.querySelector("#high-score");
+const submitButton = document.querySelector("#submit");
+const highScoreInfo = document.querySelector(".high-score-info")
 
+
+highScoreInfo.style.display="none";
+correctDisplay.style.display="none";
+wrongDisplay.style.display="none";
 initialsDisplay.style.display="none";
 
 // eventlisteners to initialize app
@@ -87,93 +113,112 @@ $(document).ready(function () {
 
 startQuiz.onclick = function initQuiz() {
 
+    quizProperties.questionSet = 0;
+    quizProperties.correct = 0;
+    quizProperties.timer = 60,
+
     nextQuestion();
 
-    // hides the start button when app is initiatlized
+    timeCheck();
+
+    questionDisplay.style.display="block";
+
+    $('#choice').show();
+
+    // hides the start button and header when app is initiatlized
     startQuiz.style.display="none";
     headerDisplay.style.display="none";
-
-    // When a choice is clicked, display question results...
-	// $('.choices').on('click', function() {
-	// 	userChoice = $(this).attr('value');
-	// 	console.log(userChoice);
-	// 	results();
-	// });
-
-        setInterval(function(){
-        document.getElementById("timer").innerHTML = "Time: " + quizProperties.timer;
-        quizProperties.timer--;
-        if (quizProperties.timer <= 0 || quizProperties.questionSet === Object.keys(questions).length){
-            // clearInterval(interval);
-            initialsDisplay.style.display="block";
-            // let button = document.createElement("button");
-            // choiceDisplay.append(button);
-            // button.classList.add("btn", "btn-primary", "mr-3", "choice");
-        }
-    }, 1000);
+    
+    // timerId = setInterval(function() {
+    //     document.getElementById("timer").innerHTML = "Time: " + quizProperties.timer;
+    //     quizProperties.timer--;
+    // }, 1000);
  }
 
  function nextQuestion() {
+    
      // gets all the questions then indexes the current questions
-     let questionContent = Object.values(questions)[quizProperties.questionSet];
+    let questionContent = Object.values(questions)[quizProperties.questionSet];
     questionDisplay.textContent = questionContent;
 
     let questionChoices = Object.values(choices)[quizProperties.questionSet];
 
-    // creates all the trivia guess options in the html
-    // $.each(questionOptions, function(index, key){
-    //     $('#options').append($('<button class="option btn btn-info btn-lg">'+key+'</button>'));
-    //   })
+    if (quizProperties.questionSet === Object.keys(questions).length) {
+        console.log("done");
+    } else {
+        questionChoices.forEach(key => {
+            let button = document.createElement("button");
+                choiceDisplay.append(button);
+                button.classList.add("btn", "btn-primary", "mr-3", "mt-3", "choice");
+                button.innerHTML = key;
+            });
+    }
+   
 
-    // creates all the trivia guess options in the html
-    // for (let i = 0; i < questionChoices.length; i++) {
-    //     const choice = questionChoices[i];
+    // questionChoices.every(function(index, key) {
     //     let button = document.createElement("button");
     //     choiceDisplay.append(button);
-    //     button.classList.add("btn", "btn-primary", "mr-3", "choice");
-    //     button.innerHTML = choice;
-        
-    // }
-
-    questionChoices.forEach(key => {
-    let button = document.createElement("button");
-        choiceDisplay.append(button);
-        button.classList.add("btn", "btn-primary", "mr-3", "mt-3", "choice");
-        button.innerHTML = key;
-    });
+    //     button.classList.add("btn", "btn-primary", "mr-3", "mt-3", "choice");
+    //     button.innerHTML = key;
+    // });
  }
 
+ function timeCheck() {
+     let timerInterval = setInterval(function() {
+        timerDisplay.innerHTML = "Time: " + quizProperties.timer;
+        quizProperties.timer--;
 
+        if(quizProperties.timer <= 0) {
+            clearInterval(timerInterval);
+            score = quizProperties.timer;
+            console.log(score);
+         } 
+         else if(quizProperties.questionSet === Object.keys(questions).length) {
 
+            clearInterval(timerInterval);
 
+            score = quizProperties.timer;
 
+            choiceDisplay.style.display="none";
+            questionDisplay.style.display="none";
 
-//  for getting a random question on the object
-//  let randomQuestion = function (obj) {
-//     let keys = Object.keys(obj);
-//     return obj[keys[ keys.length * Math.random() << 0]];
-// };
+            timerDisplay.innerHTML = "Time: 0";
 
+            initialsDisplay.style.display="block";
+            // startQuiz.style.display="block";
+            questionDisplay.style.display="block";
+            questionDisplay.innerHTML = "Your final score is " + score + "!";
 
+            headerDisplay.style.display="block";
+            headerDisplay.innerHTML = "Time's Up!";
 
+            submitButton.addEventListener("click", function(event) {
+                event.preventDefault();
+                    localStorage.setItem("high-score", score);
+                    console.log(highScoreDisplay);
+              });
 
-// var timeEl = document.querySelector(".time");
-// var mainEl = document.getElementById("main");
+         }
 
-// var secondsLeft = 10;
+    }, 1000);
+    
+ }
 
-// function setTime() {
-//   var timerInterval = setInterval(function() {
-//     secondsLeft--;
-//     timeEl.textContent = secondsLeft + " seconds left till colorsplosion.";
+ function renderHighScore() {
+    // Fill in code here to retrieve the last email and password.
+    let highScore = localStorage.getItem("record-initials");
+    // If they are null, return early from this function
+    if (email && password === null) {
+      // returns undefined if it doesnt have anything, allows us to break from the function
+      return;
+      // Else set the text of the userEmailSpan and userPasswordSpan
+    } else {
+        highScoreDisplay.textContent = email;
+    }
+    // to the corresponding values form local storgage
+  }
 
-//     if(secondsLeft === 0) {
-//       clearInterval(timerInterval);
-//       sendMessage("Time's up!");
-//     }
-
-//   }, 1000);
-// }
+ 
 
 // function sendMessage() {
 //   timeEl.textContent = " ";
